@@ -241,7 +241,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 transitionsBuilder:(context, animation, secondaryAnimation, child){
                   animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
                   return ScaleTransition(
-                    alignment: Alignment.center,
+                    alignment: Alignment.centerLeft,
                     scale: animation,
                     child: child,
                   );

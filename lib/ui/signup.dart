@@ -67,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: ClipPath(
             clipper: CustomShapeClipper(),
             child: Container(
-              height:_large? _height/9 : (_medium? _height/6.75 : _height/6.5),
+              height:_large? _height/9 : (_medium? _height/7.75 : _height/7.5),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.orange[200], Colors.pinkAccent],
