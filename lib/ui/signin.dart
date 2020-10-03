@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
+import 'package:safemap/ui/home_screen.dart';
 import 'package:safemap/ui/signup.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
@@ -197,6 +198,22 @@ class _SignInScreenState extends State<SignInScreen> {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
+        Navigator.push(context, PageRouteBuilder(
+          transitionDuration: Duration(seconds: 2),
+          transitionsBuilder:(context, animation, secondaryAnimation, child){
+            var begin= 0.0;
+            var end=1.0;
+            var tween= Tween(begin: begin,end: end);
+            animation=CurvedAnimation(parent: animation, curve: Curves.easeInCirc);
+            return ScaleTransition(
+              scale: tween.animate(animation),
+              child: RotationTransition(turns: tween.animate(animation),child: child),
+            );
+          },pageBuilder: (context, animation, secondaryAnimation)
+        {
+          return homescreen();
+        },
+        ));
           print("Routing to your account");
           Scaffold
               .of(context)
@@ -236,14 +253,19 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           GestureDetector(
             onTap: () {
+            //  SlideRigight();
+             // Navigator.pushReplacement(context,
+              //MaterialPageRoute(builder: (context)=> SignUpScreen()));
+
+
+
               Navigator.push(context, PageRouteBuilder(
                 transitionDuration: Duration(seconds: 2),
                 transitionsBuilder:(context, animation, secondaryAnimation, child){
-                  animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
-                  return ScaleTransition(
-                    alignment: Alignment.center,
-                    scale: animation,
-                    child: child,
+                 animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizeTransition(sizeFactor: animation,child: child),
                   );
                 },pageBuilder: (context, animation, secondaryAnimation)
                 {
