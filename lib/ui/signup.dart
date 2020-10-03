@@ -39,10 +39,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Column(
               children: <Widget>[
                 Opacity(opacity: 0.88,child: CustomAppBar()),
-       //         clipShape(),
-                SizedBox(height: _height / 24),
+              clipShape(),
+             //   SizedBox(height: _height / 24),
                 signUpTextRow(),
-                SizedBox(height: _height / 25),
+               // SizedBox(height: _height / 25),
                 form(),
            //     acceptTermsTextRow(),
                 SizedBox(height: _height/35,),
@@ -67,7 +67,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: ClipPath(
             clipper: CustomShapeClipper(),
             child: Container(
-              height:_large? _height/4 : (_medium? _height/3.75 : _height/3.5),
+              height:_large? _height/9 : (_medium? _height/6.75 : _height/6.5),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.orange[200], Colors.pinkAccent],
@@ -81,7 +81,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: ClipPath(
             clipper: CustomShapeClipper2(),
             child: Container(
-              height: _large? _height/4.5 : (_medium? _height/4.25 : _height/4),
+              height: _large? _height/9.5 : (_medium? _height/7.5 : _height/7),
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Colors.orange[200], Colors.pinkAccent],
@@ -93,11 +93,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         Container(
           alignment: Alignment.bottomCenter,
           margin: EdgeInsets.only(top: _large? _height/30 : (_medium? _height/25 : _height/20)),
-          child: Image.asset(
+       /*   child: Image.asset(
             'assets/images/login.png',
             height: _height/3.5,
             width: _width/3.5,
-          ),
+          ),*/
         ),
       ],
     );
@@ -202,8 +202,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       padding: EdgeInsets.all(0.0),
       child: Container(
         alignment: Alignment.center,
-//        height: _height / 20,
-        width:_large? _width/4 : (_medium? _width/3.75: _width/3.5),
+        height: _height / 15,
+        width:_large? _width/3 : (_medium? _width/3.5: _width/3.25),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
           gradient: LinearGradient(
@@ -211,7 +211,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
         padding: const EdgeInsets.all(12.0),
-        child: Text('SIGN UP', style: TextStyle(fontSize: _large? 14: (_medium? 12: 10)),),
+        child: Text('SIGN UP', style: TextStyle(fontSize: _large? 15: (_medium? 13: 11)),),
       ),
     );
   }

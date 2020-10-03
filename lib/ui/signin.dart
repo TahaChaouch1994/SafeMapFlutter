@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
+import 'package:safemap/ui/signup.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
@@ -206,6 +207,7 @@ class _SignInScreenState extends State<SignInScreen> {
       padding: EdgeInsets.all(0.0),
       child: Container(
         alignment: Alignment.center,
+        height: _height / 18,
         width: _large? _width/4 : (_medium? _width/3.75: _width/3.5),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(20.0)),
@@ -234,7 +236,21 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           GestureDetector(
             onTap: () {
-              Navigator.of(context).pushNamed(SIGN_UP);
+              Navigator.push(context, PageRouteBuilder(
+                transitionDuration: Duration(seconds: 2),
+                transitionsBuilder:(context, animation, secondaryAnimation, child){
+                  animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+                  return ScaleTransition(
+                    alignment: Alignment.center,
+                    scale: animation,
+                    child: child,
+                  );
+                },pageBuilder: (context, animation, secondaryAnimation)
+                {
+                  return SignUpScreen();
+                },
+              ));
+             // Navigator.of(context).pushNamed(SIGN_UP);
               print("Routing to Sign up screen");
             },
             child: Text(
