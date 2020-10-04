@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
+import 'package:safemap/ui/home_screen.dart';
 import 'package:safemap/ui/signup.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
@@ -35,11 +36,11 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-     _height = MediaQuery.of(context).size.height;
-     _width = MediaQuery.of(context).size.width;
-     _pixelRatio = MediaQuery.of(context).devicePixelRatio;
-     _large =  ResponsiveWidget.isScreenLarge(_width, _pixelRatio);
-     _medium =  ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
+    _height = MediaQuery.of(context).size.height;
+    _width = MediaQuery.of(context).size.width;
+    _pixelRatio = MediaQuery.of(context).devicePixelRatio;
+    _large =  ResponsiveWidget.isScreenLarge(_width, _pixelRatio);
+    _medium =  ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
     return Material(
       child: Container(
         height: _height,
@@ -114,13 +115,13 @@ class _SignInScreenState extends State<SignInScreen> {
       margin: EdgeInsets.only(left: _width / 15.0),
       child: Center(
         child:
-          Text(
-            "Sign in to your account",
-            style: TextStyle(
-              fontWeight: FontWeight.w200,
-              fontSize: _large? 20 : (_medium? 17.5 : 15),
-            ),
+        Text(
+          "Sign in to your account",
+          style: TextStyle(
+            fontWeight: FontWeight.w200,
+            fontSize: _large? 20 : (_medium? 17.5 : 15),
           ),
+        ),
       ),
     );
   }
@@ -197,10 +198,26 @@ class _SignInScreenState extends State<SignInScreen> {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
-          print("Routing to your account");
-          Scaffold
-              .of(context)
-              .showSnackBar(SnackBar(content: Text('Login Successful')));
+        Navigator.push(context, PageRouteBuilder(
+          transitionDuration: Duration(seconds: 2),
+          transitionsBuilder:(context, animation, secondaryAnimation, child){
+            var begin= 0.0;
+            var end=1.0;
+            var tween= Tween(begin: begin,end: end);
+            animation=CurvedAnimation(parent: animation, curve: Curves.easeInCirc);
+            return ScaleTransition(
+              scale: tween.animate(animation),
+              child: RotationTransition(turns: tween.animate(animation),child: child),
+            );
+          },pageBuilder: (context, animation, secondaryAnimation)
+        {
+          return homescreen();
+        },
+        ));
+        print("Routing to your account");
+        Scaffold
+            .of(context)
+            .showSnackBar(SnackBar(content: Text('Login Successful')));
 
       },
       textColor: Colors.white,
@@ -236,21 +253,26 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           GestureDetector(
             onTap: () {
+              //  SlideRigight();
+              // Navigator.pushReplacement(context,
+              //MaterialPageRoute(builder: (context)=> SignUpScreen()));
+
+
+
               Navigator.push(context, PageRouteBuilder(
                 transitionDuration: Duration(seconds: 2),
                 transitionsBuilder:(context, animation, secondaryAnimation, child){
                   animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
-                  return ScaleTransition(
-                    alignment: Alignment.centerLeft,
-                    scale: animation,
-                    child: child,
+                  return Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizeTransition(sizeFactor: animation,child: child),
                   );
                 },pageBuilder: (context, animation, secondaryAnimation)
-                {
-                  return SignUpScreen();
-                },
+              {
+                return SignUpScreen();
+              },
               ));
-             // Navigator.of(context).pushNamed(SIGN_UP);
+              // Navigator.of(context).pushNamed(SIGN_UP);
               print("Routing to Sign up screen");
             },
             child: Text(
