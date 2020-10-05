@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
+import 'package:safemap/entities/user.dart';
+import 'package:safemap/services/userservice.dart';
 import 'package:safemap/ui/home_screen.dart';
 import 'package:safemap/ui/signup.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
@@ -31,6 +33,11 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   GlobalKey<FormState> _key = GlobalKey();
+
+  UserService userService = new UserService();
+
+  TextEditingController adressemail = new TextEditingController();
+  TextEditingController mdp = new TextEditingController();
 
 
 
@@ -148,7 +155,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget emailTextFormField() {
     return CustomTextField(
       keyboardType: TextInputType.emailAddress,
-      textEditingController: emailController,
+      textEditingController: adressemail,
       icon: Icons.email,
       hint: "Email",
     );
@@ -158,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget passwordTextFormField() {
     return CustomTextField(
       keyboardType: TextInputType.emailAddress,
-      textEditingController: passwordController,
+      textEditingController: mdp,
       icon: Icons.lock,
       obscureText: true,
       hint: "Password",
@@ -198,23 +205,33 @@ class _SignInScreenState extends State<SignInScreen> {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
-        Navigator.push(context, PageRouteBuilder(
-          transitionDuration: Duration(seconds: 2),
-          transitionsBuilder:(context, animation, secondaryAnimation, child){
-            var begin= 0.0;
-            var end=1.0;
-            var tween= Tween(begin: begin,end: end);
-            animation=CurvedAnimation(parent: animation, curve: Curves.easeInCirc);
-            return ScaleTransition(
-              scale: tween.animate(animation),
-              child: RotationTransition(turns: tween.animate(animation),child: child),
-            );
-          },pageBuilder: (context, animation, secondaryAnimation)
-        {
-          return homescreen();
-        },
-        ));
-        print("Routing to your account");
+
+        User euser = new User();
+        euser.adressemail = adressemail.text.trim();
+        euser.mdp = mdp.text.trim();
+
+        Future <dynamic> user = userService.login(euser);
+        user.then((value) {
+          if(value == "matched")
+            {
+              Navigator.push(context, PageRouteBuilder(
+                transitionDuration: Duration(seconds: 2),
+                transitionsBuilder:(context, animation, secondaryAnimation, child){
+                  var begin= 0.0;
+                  var end=1.0;
+                  var tween= Tween(begin: begin,end: end);
+                  animation=CurvedAnimation(parent: animation, curve: Curves.easeInCirc);
+                  return ScaleTransition(
+                    scale: tween.animate(animation),
+                    child: RotationTransition(turns: tween.animate(animation),child: child),
+                  );
+                },pageBuilder: (context, animation, secondaryAnimation)
+              {
+                return homescreen();
+              },
+              ));
+            }
+        });
         Scaffold
             .of(context)
             .showSnackBar(SnackBar(content: Text('Login Successful')));

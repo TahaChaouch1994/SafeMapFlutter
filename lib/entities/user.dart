@@ -19,6 +19,7 @@ class User {
     data['id'] = id;
     data['adressemail'] = adressemail;
     data['prenom'] = prenom;
+    data['nom'] = nom;
     data['mdp'] = mdp;
     return data;
   }

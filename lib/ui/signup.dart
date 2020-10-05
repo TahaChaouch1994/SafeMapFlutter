@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
+import 'package:safemap/entities/user.dart';
+import 'package:safemap/services/userservice.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
 import 'package:safemap/ui/widgets/customappbar.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
@@ -19,6 +21,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   double _pixelRatio;
   bool _large;
   bool _medium;
+
+  UserService userService = new UserService();
+
+  TextEditingController adressemail = new TextEditingController();
+  TextEditingController nom = new TextEditingController();
+  TextEditingController prenom = new TextEditingController();
+  TextEditingController mdp = new TextEditingController();
+  TextEditingController rmdp = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       keyboardType: TextInputType.text,
       icon: Icons.person,
       hint: "First Name",
+      textEditingController: prenom,
     );
   }
 
@@ -140,22 +151,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
       keyboardType: TextInputType.text,
       icon: Icons.person,
       hint: "Last Name",
+      textEditingController: nom,
     );
   }
 
   Widget emailTextFormField() {
     return CustomTextField(
+
       keyboardType: TextInputType.emailAddress,
       icon: Icons.email,
       hint: "Email",
+      textEditingController: adressemail,
     );
   }
 
   Widget phoneTextFormField() {
     return CustomTextField(
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.text,
+      obscureText: true,
       icon: Icons.lock,
       hint: "Password",
+      textEditingController: mdp,
+
     );
   }
 
@@ -165,6 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       obscureText: true,
       icon: Icons.lock,
       hint: "Repeat Password",
+      textEditingController: rmdp,
     );
   }
 
@@ -196,7 +214,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
-        print("Routing to your account");
+        User euser = new User();
+        euser.prenom = prenom.text.trim();
+        euser.nom = nom.text.trim();
+        euser.adressemail = adressemail.text.trim();
+        euser.mdp = mdp.text.trim();
+
+        Future <dynamic> user = userService.getUserBeforeSignup(euser);
+        user.then((value) {
+          print(value);
+        });
       },
       textColor: Colors.white,
       padding: EdgeInsets.all(0.0),
