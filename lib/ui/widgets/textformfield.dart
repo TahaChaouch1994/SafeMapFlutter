@@ -3,6 +3,7 @@ import 'package:safemap/ui/widgets/responsive_ui.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hint;
+   Color colortext=Colors.orange[200];
   final TextEditingController textEditingController;
   final TextInputType keyboardType;
   final bool obscureText;
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
       this.keyboardType,
       this.icon,
       this.obscureText= false,
+this.colortext,
      });
 
   @override
@@ -33,9 +35,9 @@ class CustomTextField extends StatelessWidget {
       child: TextFormField(
         controller: textEditingController,
         keyboardType: keyboardType,
-        cursorColor: Colors.orange[200],
+        cursorColor:colortext,
         decoration: InputDecoration(
-          prefixIcon: Icon(icon, color: Colors.orange[200], size: 20),
+          prefixIcon: Icon(icon, color:colortext, size: 20),
           hintText: hint,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30.0),

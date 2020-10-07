@@ -26,8 +26,8 @@ class Validator {
   String validatePasswordLength(String value){
     if(value.length==0){
       return "Password can't be empty";
-    } else if (value.length < 10){
-      return "Password must be longer than 10 characters";
+    } else if (value.length < 5){
+      return "Password must be longer than 5 characters";
     }
     return null;
   }

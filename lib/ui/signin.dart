@@ -39,6 +39,8 @@ class _SignInScreenState extends State<SignInScreen> {
   TextEditingController adressemail = new TextEditingController();
   TextEditingController mdp = new TextEditingController();
 
+  bool x=true;
+
 
 
   @override
@@ -143,33 +145,58 @@ class _SignInScreenState extends State<SignInScreen> {
         key: _key,
         child: Column(
           children: <Widget>[
-            emailTextFormField(),
+            emailTextFormField(x),
             SizedBox(height: _height / 40.0),
-            passwordTextFormField(),
+            passwordTextFormField(x),
           ],
         ),
       ),
     );
   }
 
-  Widget emailTextFormField() {
-    return CustomTextField(
-      keyboardType: TextInputType.emailAddress,
-      textEditingController: adressemail,
-      icon: Icons.email,
-      hint: "Email",
-    );
+  Widget emailTextFormField(x) {
+    if(x==false) {
+      return CustomTextField(
+        keyboardType: TextInputType.emailAddress,
+        textEditingController: adressemail,
+        icon: Icons.email,
+        hint: "Email",
+        colortext: Colors.red,
+      );
 
+    }
+    else{
+
+      return CustomTextField(
+        keyboardType: TextInputType.emailAddress,
+        textEditingController: adressemail,
+        icon: Icons.email,
+        hint: "Email",
+        colortext: Colors.orange[200],
+      );
+    }
   }
 
-  Widget passwordTextFormField() {
+  Widget passwordTextFormField(x) {
+    if(x==false) {
     return CustomTextField(
       keyboardType: TextInputType.emailAddress,
       textEditingController: mdp,
       icon: Icons.lock,
       obscureText: true,
       hint: "Password",
-    );
+      colortext: Colors.red,
+    );}
+    else{
+      return CustomTextField(
+        keyboardType: TextInputType.emailAddress,
+        textEditingController: mdp,
+        icon: Icons.lock,
+        obscureText: true,
+        hint: "Password",
+        colortext: Colors.orange[200],
+      );
+    }
   }
 
   Widget forgetPassTextRow() {
@@ -230,11 +257,33 @@ class _SignInScreenState extends State<SignInScreen> {
                 return homescreen();
               },
               ));
+              Scaffold
+                  .of(context)
+                  .showSnackBar(SnackBar(content: Text('Login Successful',style: TextStyle(color:Colors.green),)));
             }
+          else {
+            setState(() {
+              x=false;
+            });
+            PageRouteBuilder(
+              transitionDuration: Duration(seconds: 2),
+              transitionsBuilder:(context, animation, secondaryAnimation, child){
+                animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+                return Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SizeTransition(sizeFactor: animation,child: child),
+                );
+              },pageBuilder: (context, animation, secondaryAnimation)
+            {
+              return SignInScreen();
+            },
+            );
+            Scaffold
+                .of(context)
+                .showSnackBar(SnackBar(content: Text('email or password is incorrect',style: TextStyle(color:Colors.red),)));
+
+          }
         });
-        Scaffold
-            .of(context)
-            .showSnackBar(SnackBar(content: Text('Login Successful')));
 
       },
       textColor: Colors.white,

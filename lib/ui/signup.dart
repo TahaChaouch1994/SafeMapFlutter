@@ -1,13 +1,17 @@
+
+
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
 import 'package:safemap/entities/user.dart';
 import 'package:safemap/services/userservice.dart';
+import 'package:safemap/ui/signin.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
 import 'package:safemap/ui/widgets/customappbar.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
-
-
+import 'package:safemap/utils/validator.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -41,7 +45,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     return Material(
       child: Scaffold(
-        body: Container(
+        body:Builder(
+        builder: (context) =>
+        Container(
           height: _height,
           width: _width,
           margin: EdgeInsets.only(bottom: 5),
@@ -56,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 form(),
            //     acceptTermsTextRow(),
                 SizedBox(height: _height/35,),
-                button(),
+                button(context),
             //    infoTextRow(),
                // socialIconsRow(),
                 //signInTextRow(),
@@ -65,7 +71,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   Widget clipShape() {
@@ -209,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget button() {
+  Widget button(context) {
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
@@ -220,11 +226,84 @@ class _SignUpScreenState extends State<SignUpScreen> {
         euser.adressemail = adressemail.text.trim();
         euser.mdp = mdp.text.trim();
 
-        Future <dynamic> user = userService.getUserBeforeSignup(euser);
-        user.then((value) {
-          print(value);
-        });
-      },
+        if (Validator().validateName(euser.prenom) != null)
+        {
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text(
+            Validator().validateName(euser.prenom),
+            style: TextStyle(color: Colors.orange),)));
+        }
+        else if (Validator().validateName(euser.nom) != null)
+        {
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text("Last"+" "+
+            Validator().validateName(euser.nom),
+            style: TextStyle(color: Colors.orange),)));
+        }
+        else if (Validator().validateEmail(euser.adressemail) != null)
+        {
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text(
+            Validator().validateEmail(euser.adressemail),
+            style: TextStyle(color: Colors.orange))));
+        }
+        else if (Validator().validatePasswordLength(euser.mdp) != null)
+        {
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text(
+            Validator().validatePasswordLength(euser.mdp),
+            style: TextStyle(color: Colors.orange),)));
+        }
+        else if (Validator().validatePasswordLength(euser.mdp) != null)
+        {
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text(
+            Validator().validatePasswordLength(euser.mdp),
+            style: TextStyle(color: Colors.orange),)));
+        }
+        else if (euser.mdp.trim() != rmdp.text.trim())
+        {
+          Scaffold
+              .of(context)
+              .showSnackBar(SnackBar(content: Text("passwords don't match",
+            style: TextStyle(color: Colors.deepOrange),)));
+        }else {
+          Future <dynamic> user = userService.getUserBeforeSignup(euser);
+          user.then((value) {
+            print(value);
+            if (value == "AffectGood") {
+              Navigator.push(context, PageRouteBuilder(
+                transitionDuration: Duration(seconds: 2),
+                transitionsBuilder: (context, animation, secondaryAnimation,
+                    child) {
+                  animation = CurvedAnimation(parent: animation, curve: Curves
+                      .elasticInOut);
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: SizeTransition(sizeFactor: animation, child: child),
+                  );
+                },
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return SignInScreen();
+                },
+              ));
+              // Navigator.of(context).pushNamed(SIGN_UP);
+              print("Routing to Sign up screen");
+            }
+            else {
+              Scaffold
+                  .of(context)
+                  .showSnackBar(SnackBar(content: Text(
+                'oops something went wrong',
+                style: TextStyle(color: Colors.red),)));
+            }
+          });
+        }},
       textColor: Colors.white,
       padding: EdgeInsets.all(0.0),
       child: Container(
