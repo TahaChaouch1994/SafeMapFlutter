@@ -4,7 +4,11 @@ class Validator {
     RegExp regExp = new RegExp(pattern);
     if (value.length == 0) {
       return "Name is Required";
-    } else if (!regExp.hasMatch(value)) {
+    }
+    else if (value.length >= 0) {
+      return "Name Length can not depass 15 character ";
+    }
+    else if (!regExp.hasMatch(value)) {
       return "Name must be a-z and A-Z";
     }
     return null;
