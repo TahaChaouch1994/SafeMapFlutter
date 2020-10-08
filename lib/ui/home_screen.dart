@@ -5,6 +5,9 @@ import 'package:safemap/ui/widgets/acceuil.dart';
 import 'package:safemap/ui/widgets/ajout_reclamation.dart';
 import 'package:safemap/ui/widgets/map.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 
 class homescreen extends StatefulWidget{
@@ -21,6 +24,15 @@ class _homescreenState extends State<homescreen> {
   double _pixelRatio;
   bool _large;
   bool _medium;
+  GoogleMapController mapController;
+  final Map<String, Marker> _markers = {};
+
+  final LatLng _center = const LatLng(45.521563, -122.677433);
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+  }
+
   @override
   Widget build(BuildContext context) {
     _height = MediaQuery.of(context).size.height;
@@ -56,13 +68,29 @@ class _homescreenState extends State<homescreen> {
     );
   }
 
-navigationbottombar(int page) {
-    if(page == 0)
-      {return Acceuil();}
-    if(page == 1)
-    {return Mapgoogle();}
-    if(page == 2)
-    {return Ajout(_height,_width,_large,_medium);}
-    else{return Acceuil();}
-}
+        navigationbottombar(int page) {
+            if(page == 0)
+              {return Acceuil();}
+            if(page == 1)
+            {return Mapgoogle(_markers,_getLocation);}
+            if(page == 2)
+            {return Ajout(_height,_width,_large,_medium);}
+            else{return Acceuil();}
+        }
+
+  void _getLocation() async {
+    var currentLocation = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+
+    setState(() {
+      _markers.clear();
+      final marker = Marker(
+        markerId: MarkerId("curr_loc"),
+        position: LatLng(currentLocation.latitude, currentLocation.longitude),
+        infoWindow: InfoWindow(title: 'Your Location'),
+      );
+      _markers["Current Location"] = marker;
+    });
+  }
+
 }
