@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField2 extends StatelessWidget {
   final String hint;
-   Color colortext=Colors.orange[200];
+  Color colortext=Colors.orange[200];
   final TextEditingController textEditingController;
   final TextInputType keyboardType;
   final bool obscureText;
   final IconData icon;
+  final IconData icon2;
   final InputDecoration decoration;
   double _width;
   double _pixelRatio;
@@ -15,16 +16,17 @@ class CustomTextField extends StatelessWidget {
   bool medium;
 
 
-  CustomTextField(
-    {this.hint,
-      this.textEditingController,
-      this.keyboardType,
-      this.icon,
-      this.obscureText= false,
-      this.colortext,
-      this.decoration,
+  CustomTextField2(
+      {this.hint,
+        this.textEditingController,
+        this.keyboardType,
+        this.icon,
+        this.icon2,
+        this.obscureText= false,
+        this.colortext,
+        this.decoration,
 
-     });
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +42,22 @@ class CustomTextField extends StatelessWidget {
         keyboardType: keyboardType,
         cursorColor:colortext,
         decoration: InputDecoration(
+          suffixIcon: IconButton(icon: Icon(icon2), color:colortext, iconSize: 20,onPressed: () {},),
           prefixIcon: Icon(icon, color:colortext, size: 20),
           hintText: hint,
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(30.0),
               borderSide: BorderSide.none),
         ),
-      ),
+        ),
     );
+  }
+
+
+  int test()
+  {
+    print("test");
+    return 3;
   }
 }
 

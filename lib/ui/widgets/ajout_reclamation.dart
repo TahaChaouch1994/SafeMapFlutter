@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:safemap/ui/widgets/custom_text_area.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
+import 'package:safemap/ui/widgets/textformfield2.dart';
 
 
 Widget Ajout(_height,_width,_large,_medium) {
+  List<Widget>list = new List();
 
   return Container(color: Colors.orange[200],
     margin: EdgeInsets.only(
         left:_width/ 12.0,
         right: _width / 12.0,
         top: _height / 20.0),
-    child: Form(
+
+    child:SingleChildScrollView(
+     child : Form(
       child: Column(
         children: <Widget>[
           SizedBox(height: _height / 10.0),
@@ -27,6 +31,7 @@ Widget Ajout(_height,_width,_large,_medium) {
           button(_height, _width, _large, _medium),
         ],
       ),
+    ),
     ),
   );
 }
@@ -47,10 +52,11 @@ Widget ajout_reclamation (_large,_medium,_width) {
   );
 }
 Widget materiel() {
-  return CustomTextField(
+  return CustomTextField2(
     keyboardType: TextInputType.text,
     icon: Icons.business_center,
     hint: " objets volés",
+    icon2: Icons.add,
   );
 }
 
@@ -102,5 +108,19 @@ Widget button(_height,_width,_large,_medium) {
       padding: const EdgeInsets.all(12.0),
       child: Text('submit',style: TextStyle(fontSize: _large? 14: (_medium? 12: 10))),
     ),
+  );
+
+
+
+}
+
+
+Widget test(list) {
+  return  Container(
+      padding: EdgeInsets.all(20.0),
+      child: new ListView.builder(itemBuilder: (context, index){
+        Widget widget = list.elementAt(index);
+        return widget;
+      }, itemCount: list.length,),
   );
 }
