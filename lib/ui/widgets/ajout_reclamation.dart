@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:safemap/ui/widgets/custom_text_area.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
@@ -7,6 +8,8 @@ import 'package:safemap/ui/widgets/textformfield2.dart';
 Widget Ajout(_height,_width,_large,_medium) {
   List<Widget>list = new List();
 
+  final List<String> items = new List<String>.generate(3, (i) => "Items ${i+1}");
+
   return Container(color: Colors.orange[200],
     margin: EdgeInsets.only(
         left:_width/ 12.0,
@@ -14,6 +17,7 @@ Widget Ajout(_height,_width,_large,_medium) {
         top: _height / 20.0),
 
     child:SingleChildScrollView(
+
      child : Form(
       child: Column(
         children: <Widget>[
@@ -24,11 +28,14 @@ Widget Ajout(_height,_width,_large,_medium) {
           SizedBox(height: _height / 40.0),
           materiel(),
           SizedBox(height: _height/ 40.0),
+          lista(items),
+          SizedBox(height: _height/ 40.0),
           contact(),
           SizedBox(height: _height / 40.0),
           description(),
           SizedBox(height: _height / 40.0),
           button(_height, _width, _large, _medium),
+
         ],
       ),
     ),
@@ -122,5 +129,34 @@ Widget test(list) {
         Widget widget = list.elementAt(index);
         return widget;
       }, itemCount: list.length,),
+  );
+}
+
+
+
+
+   Widget lista(items)
+{
+  return ListView.builder(
+
+    padding: const EdgeInsets.only(left: 50.0,right: 50.0),
+    shrinkWrap: true,
+    itemCount: items.length,
+    itemBuilder: (context,int index){
+      return new Dismissible(
+       key: new Key(items[index]),
+        onDismissed: (direction){
+            items.removeAt(index);
+         Scaffold.of(context).showSnackBar(new SnackBar(
+             content: new Text("Item dismissed"),
+         ));
+        },
+        child: new ListTile(
+          title: new Text("${items[index]}"),
+        )
+      );
+    },
+
+
   );
 }
