@@ -26,6 +26,8 @@ class _homescreenState extends State<homescreen> {
   bool _medium;
   GoogleMapController mapController;
   final Map<String, Marker> _markers = {};
+  TextEditingController Ojbet = TextEditingController();
+
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
 
@@ -40,6 +42,7 @@ class _homescreenState extends State<homescreen> {
     _pixelRatio = MediaQuery.of(context).devicePixelRatio;
     _large =  ResponsiveWidget.isScreenLarge(_width, _pixelRatio);
     _medium =  ResponsiveWidget.isScreenMedium(_width, _pixelRatio);
+
 
     return Scaffold(
       backgroundColor: Colors.orange[200],
@@ -61,7 +64,7 @@ class _homescreenState extends State<homescreen> {
               { setState(() {
                 _page = index;
               });
-              debugPrint("hani fil $index");
+              debugPrint("je suis dans la page  $index");
               },
       ),
       body:navigationbottombar(_page,),
@@ -74,7 +77,7 @@ class _homescreenState extends State<homescreen> {
             if(page == 1)
             {return Mapgoogle(_markers,_getLocation);}
             if(page == 2)
-            {return Ajout(_height,_width,_large,_medium);}
+            {return Ajout();}
             else{return Acceuil();}
         }
 
@@ -92,5 +95,6 @@ class _homescreenState extends State<homescreen> {
       _markers["Current Location"] = marker;
     });
   }
+
 
 }

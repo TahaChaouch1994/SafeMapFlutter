@@ -5,7 +5,7 @@ class Validator {
     if (value.length == 0) {
       return "Name is Required";
     }
-    else if (value.length >= 0) {
+    else if (value.length >= 10) {
       return "Name Length can not depass 15 character ";
     }
     else if (!regExp.hasMatch(value)) {
