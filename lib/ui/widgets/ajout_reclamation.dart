@@ -238,19 +238,32 @@ class _AjoutState extends State<Ajout> {
         return new Dismissible(
             key: new Key(items[index]),
             onDismissed: (direction) {
-              items.removeAt(index);
+              setState((){
+                items.removeAt(index);
+              });
               Scaffold.of(context).showSnackBar(new SnackBar(
                 content: new Text("Item dismissed"),
               ));
             },
             child: new Card(
               child:Container(
+
                 height: _height/13,
                 width: _width/16,
-                color: Colors.white,
+                //color: Colors.white,
                 child: Center(
-                  child: Text("${items[index]}", style: textStyle),
-                ),)
+                  child: Text("${items[index]}", style: TextStyle(color: Colors.grey[700],fontWeight: FontWeight.bold)),
+
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 4),
+                  ],
+                ),
+              )
+
 
             ),
         );
