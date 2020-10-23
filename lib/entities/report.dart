@@ -5,6 +5,9 @@ class Report {
   String victim;
   String contact;
   String description;
+  String longitude;
+  String latitude;
+  List<String>  objetvole;
 
 
   Report.fromJsonMap(Map<String, dynamic> map):
@@ -12,7 +15,12 @@ class Report {
         usermail = map["usermail"],
         victim = map["victim"],
         contact = map["contact"],
-        description = map["description"];
+        description = map["description"],
+        longitude = map["longitude"],
+        objetvole = map["objetvole"],
+        latitude = map["latitude"];
+
+
 
 
   Map<String, dynamic> toJson() {
@@ -22,6 +30,9 @@ class Report {
     data['victim'] = victim;
     data['contact'] = contact;
     data['description'] = description;
+    data['longitude'] = longitude;
+    data['latitude'] = latitude;
+    data['objetvole'] = objetvole;
     return data;
   }
 
