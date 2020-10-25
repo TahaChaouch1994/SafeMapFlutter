@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:safemap/entities/report.dart';
+import 'package:safemap/services/mapservice.dart';
 import 'package:safemap/ui/widgets/custom_text_area.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
@@ -8,6 +10,7 @@ import 'package:safemap/ui/widgets/textformfield2.dart';
 class Ajout extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
 
+
   Ajout();
 
   @override
@@ -15,6 +18,13 @@ class Ajout extends StatefulWidget {
 }
 
 class _AjoutState extends State<Ajout> {
+  MapService mapservice = new MapService();
+
+  TextEditingController nomdevictime = new TextEditingController();
+  TextEditingController moyendecontact = new TextEditingController();
+  TextEditingController descriptiont = new TextEditingController();
+
+
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController;
   static List<String> objetsList=[];
@@ -117,8 +127,9 @@ class _AjoutState extends State<Ajout> {
               ) {
             setState(() {
               if(object.text.trim().length!=0) {
-                items.insert(0, object.text);
+                items.insert(0, object.text.replaceAll(';', '').trim());
               }
+
               else
               {
                 return     Scaffold.of(context).showSnackBar(new SnackBar(
@@ -143,6 +154,7 @@ class _AjoutState extends State<Ajout> {
       keyboardType: TextInputType.text,
       icon: Icons.person,
       hint: "Nom de victime ",
+      textEditingController: nomdevictime,
     );
   }
 
@@ -151,6 +163,7 @@ class _AjoutState extends State<Ajout> {
       keyboardType: TextInputType.emailAddress,
       icon: Icons.contact_mail,
       hint: "moyen de contact",
+      textEditingController: moyendecontact,
     );
   }
 
@@ -161,6 +174,7 @@ class _AjoutState extends State<Ajout> {
       obscureText: true,
       icon: Icons.description,
       hint: "Description",
+      textEditingController: descriptiont,
     );
   }
 
@@ -170,6 +184,20 @@ class _AjoutState extends State<Ajout> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
       onPressed: () {
 
+        Report reported = new Report();
+        reported.longitude = "0";
+        reported.latitude ="0";
+        reported.usermail = "getsession";
+        reported.contact = moyendecontact.text.trim();
+        reported.description = descriptiont.text.trim();
+        reported.victim = nomdevictime.text.trim();
+        reported.objetvole = objetsList;
+
+
+        Future <dynamic> rpt = mapservice.reportincident(reported);
+        rpt.then((value) {
+          print(value);
+        });
 
       },
       textColor: Colors.white,
@@ -237,19 +265,32 @@ class _AjoutState extends State<Ajout> {
         return new Dismissible(
             key: new Key(items[index]),
             onDismissed: (direction) {
-              items.removeAt(index);
+              setState((){
+                items.removeAt(index);
+              });
               Scaffold.of(context).showSnackBar(new SnackBar(
                 content: new Text("Item dismissed"),
               ));
             },
             child: new Card(
               child:Container(
+
                 height: _height/13,
                 width: _width/16,
-                color: Colors.white,
+                //color: Colors.white,
                 child: Center(
-                  child: Text("${items[index]}", style: textStyle),
-                ),)
+                  child: Text("${items[index]}", style: TextStyle(color: Colors.grey[700],fontWeight: FontWeight.bold)),
+
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  boxShadow: [
+                    BoxShadow(color: Colors.white, spreadRadius: 4),
+                  ],
+                ),
+              )
+
 
             ),
         );

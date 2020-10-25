@@ -7,7 +7,7 @@ class MapService {
 
 
 
-  Future<dynamic> reportincident(Report report) async
+  Future <dynamic> reportincident(Report report) async
   {
     Response res = await post(link.linkw+"/report", headers: {"Content-Type": "application/json"}, body: jsonEncode(report));
     dynamic body = jsonDecode(res.body);
