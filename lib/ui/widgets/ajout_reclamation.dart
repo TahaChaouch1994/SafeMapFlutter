@@ -1,5 +1,4 @@
 
-import 'package:animated_stream_list/animated_stream_list.dart';
 import 'package:flutter/material.dart';
 import 'package:safemap/ui/widgets/custom_text_area.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
@@ -193,7 +192,7 @@ class _AjoutState extends State<Ajout> {
   }
 
 //test
-  Widget test(items) {
+  /*Widget test(items) {
     final animatedView = AnimatedStreamList<String>(
       streamList: items, // 1.
       itemBuilder: (String item, int index, BuildContext context,
@@ -224,7 +223,7 @@ class _AjoutState extends State<Ajout> {
 
     );
   }
-
+*/
 
   Widget lista(items) {
     TextStyle textStyle = Theme.of(context).textTheme.headline6;
