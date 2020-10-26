@@ -35,6 +35,7 @@ dependencies:
   curved_navigation_bar: ^0.3.4
   flutter_skeleton: ^0.1.0+1
   expansion_card: ^0.1.0
+  shared_preferences: ^0.5.12+2
 
 
 dev_dependencies:

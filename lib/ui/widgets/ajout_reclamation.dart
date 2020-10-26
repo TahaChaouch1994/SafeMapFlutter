@@ -1,11 +1,16 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:safemap/entities/report.dart';
+import 'package:safemap/entities/user.dart';
 import 'package:safemap/services/mapservice.dart';
+import 'package:safemap/ui/widgets/MarkMap.dart';
 import 'package:safemap/ui/widgets/custom_text_area.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
 import 'package:safemap/ui/widgets/textformfield2.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Ajout extends StatefulWidget {
   final _formKey = GlobalKey<FormState>();
@@ -19,12 +24,14 @@ class Ajout extends StatefulWidget {
 
 class _AjoutState extends State<Ajout> {
   MapService mapservice = new MapService();
-
+  Future<SharedPreferences> _prefs;
   TextEditingController nomdevictime = new TextEditingController();
   TextEditingController moyendecontact = new TextEditingController();
   TextEditingController descriptiont = new TextEditingController();
 
-
+  User loggedInUser;
+  String longitude;
+  String latitude;
   final _formKey = GlobalKey<FormState>();
   TextEditingController _nameController;
   static List<String> objetsList=[];
@@ -39,7 +46,28 @@ class _AjoutState extends State<Ajout> {
   void initState() {
     super.initState();
     _nameController = TextEditingController();
-  }
+    _prefs = SharedPreferences.getInstance();
+    _prefs.then((SharedPreferences prefs) {
+      setState(() {
+        Map<String, dynamic> text = jsonDecode(prefs.get("go_user"));
+       // print(text);
+      //  print("conversion");
+        this.loggedInUser = User.fromJsonMap(text);
+      //  print(this.loggedInUser.adressemail);
+
+
+
+
+       double long = jsonDecode(prefs.get("longitude"));
+        this.longitude=long.toString();
+        print("fffffffffffffffffffffffffffffffffffffff");
+        print(this.longitude);
+        double lat = jsonDecode(prefs.get("latitude"));
+        this.latitude=lat.toString();
+        print(this.latitude);
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      });});
+      }
 
   @override
   void dispose() {
@@ -87,6 +115,7 @@ class _AjoutState extends State<Ajout> {
               SizedBox(height: _height / 40.0),
               description(),
               SizedBox(height: _height / 40.0),
+              buttonMap(),
               button(),
 
             ],
@@ -178,6 +207,45 @@ class _AjoutState extends State<Ajout> {
     );
   }
 
+  Widget buttonMap() {
+    return RaisedButton(
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
+      onPressed: () {
+
+        Navigator.push(context, PageRouteBuilder(
+          transitionDuration: Duration(seconds: 2),
+          transitionsBuilder:(context, animation, secondaryAnimation, child){
+            animation=CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
+            return Align(
+              alignment: Alignment.bottomCenter,
+              child: SizeTransition(sizeFactor: animation,child: child),
+            );
+          },pageBuilder: (context, animation, secondaryAnimation)
+        {
+          return MapMark();
+        },
+        ));
+
+      },
+      textColor: Colors.white,
+      padding: EdgeInsets.all(0.0),
+      child: Container(
+        alignment: Alignment.center,
+        height: _height / 18,
+        width: _large ? _width / 4 : (_medium ? _width / 3.75 : _width / 3.5),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          gradient: LinearGradient(
+            colors: <Color>[Colors.black, Colors.black38],
+          ),
+        ),
+        padding: const EdgeInsets.all(12.0),
+        child: Text('Map',
+            style: TextStyle(fontSize: _large ? 14 : (_medium ? 12 : 10))),
+      ),
+    );
+  }
   Widget button() {
     return RaisedButton(
       elevation: 0,
@@ -185,9 +253,9 @@ class _AjoutState extends State<Ajout> {
       onPressed: () {
 
         Report reported = new Report();
-        reported.longitude = "0";
-        reported.latitude ="0";
-        reported.usermail = "getsession";
+        reported.longitude = this.longitude.toString();
+        reported.latitude =this.latitude.toString();
+        reported.usermail = this.loggedInUser.adressemail.toString();
         reported.contact = moyendecontact.text.trim();
         reported.description = descriptiont.text.trim();
         reported.victim = nomdevictime.text.trim();
@@ -196,7 +264,7 @@ class _AjoutState extends State<Ajout> {
 
         Future <dynamic> rpt = mapservice.reportincident(reported);
         rpt.then((value) {
-          print(value);
+        //  print(value);
         });
 
       },
@@ -301,9 +369,3 @@ class _AjoutState extends State<Ajout> {
   }
 }
 
-_createTile(String item, Animation<double> animation) {
-
-}
-
-_createRemovedTile(String item, Animation<double> animation) {
-}

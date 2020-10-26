@@ -34,6 +34,12 @@ class UserService {
       return body;
   }
 
+  Future<dynamic> getUserFromLogin(String login) async
+  {
+    Response res = await get(link.linkw+"/getuserfromlogin/"+login);
+    dynamic body = jsonDecode(res.body);
+    return body;
+  }
 
 
 

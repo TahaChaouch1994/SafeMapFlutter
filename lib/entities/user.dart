@@ -1,6 +1,6 @@
 class User {
 
-  String id;
+  int id;
   String adressemail;
   String prenom;
   String nom;

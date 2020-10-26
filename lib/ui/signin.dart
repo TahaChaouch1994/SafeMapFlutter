@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:safemap/constants/constants.dart';
 import 'package:safemap/entities/user.dart';
@@ -7,6 +9,7 @@ import 'package:safemap/ui/signup.dart';
 import 'package:safemap/ui/widgets/custom_shape.dart';
 import 'package:safemap/ui/widgets/responsive_ui.dart';
 import 'package:safemap/ui/widgets/textformfield.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class SignInPage extends StatelessWidget {
@@ -24,6 +27,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
   double _height;
   double _width;
@@ -238,9 +243,17 @@ class _SignInScreenState extends State<SignInScreen> {
         euser.mdp = mdp.text.trim();
 
         Future <dynamic> user = userService.login(euser);
+
         user.then((value) {
           if(value == "matched")
             {
+              Future <dynamic> user1 = userService.getUserFromLogin(euser.adressemail);
+              user1.then((value) {
+                User loggedInUser = User.fromJsonMap(value[0]);
+
+                _saveUser(loggedInUser);
+              });
+
               Navigator.push(context, PageRouteBuilder(
                 transitionDuration: Duration(seconds: 2),
                 transitionsBuilder:(context, animation, secondaryAnimation, child){
@@ -350,6 +363,16 @@ class _SignInScreenState extends State<SignInScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _saveUser(User user) async {
+    final SharedPreferences prefs = await _prefs;
+
+    setState(() {
+      prefs.setString("go_user", jsonEncode(user)).then((bool success) {
+        return jsonEncode(user);
+      });
+    });
   }
 
 }
