@@ -250,8 +250,8 @@ class _AjoutState extends State<Ajout> {
     return RaisedButton(
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-      onPressed: () {
-
+      onPressed: () async {
+await mark();
         Report reported = new Report();
         reported.longitude = this.longitude.toString();
         reported.latitude =this.latitude.toString();
@@ -366,6 +366,21 @@ class _AjoutState extends State<Ajout> {
 
 
     );
+  }
+  void mark()
+  {
+    _prefs = SharedPreferences.getInstance();
+    _prefs.then((SharedPreferences prefs) {
+      setState(() {
+        double long = jsonDecode(prefs.get("longitude"));
+        this.longitude=long.toString();
+        print("fffffffffffffffffffffffffffffffffffffff");
+        print(this.longitude);
+        double lat = jsonDecode(prefs.get("latitude"));
+        this.latitude=lat.toString();
+        print(this.latitude);
+        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+      });});
   }
 }
 

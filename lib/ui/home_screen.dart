@@ -40,7 +40,6 @@ class _homescreenState extends State<homescreen> {
   @override
   void initState() {
     super.initState();
-    _saveMark(0, 0);
   }
   @override
   Widget build(BuildContext context) {
@@ -102,17 +101,6 @@ class _homescreenState extends State<homescreen> {
       _markers["Current Location"] = marker;
     });
   }
-  Future<void> _saveMark(double longitude, double latitude) async {
-    final SharedPreferences prefs = await _prefs;
 
-    setState(() {
-      prefs.setString("longitude", longitude.toString()).then((bool success) {
-        return longitude.toString();
-      });
-      prefs.setString("latitude", latitude.toString()).then((bool success) {
-        return latitude.toString();
-      });
-    });
-  }
 
 }

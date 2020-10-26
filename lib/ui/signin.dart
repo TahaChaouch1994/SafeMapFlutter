@@ -246,7 +246,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
         user.then((value) {
           if(value == "matched")
-            {
+            {_saveMark(0,0);
               Future <dynamic> user1 = userService.getUserFromLogin(euser.adressemail);
               user1.then((value) {
                 User loggedInUser = User.fromJsonMap(value[0]);
@@ -371,6 +371,18 @@ class _SignInScreenState extends State<SignInScreen> {
     setState(() {
       prefs.setString("go_user", jsonEncode(user)).then((bool success) {
         return jsonEncode(user);
+      });
+    });
+  }
+  Future<void> _saveMark(double longitude, double latitude) async {
+    final SharedPreferences prefs = await _prefs;
+
+    setState(() {
+      prefs.setString("longitude", longitude.toString()).then((bool success) {
+        return longitude.toString();
+      });
+      prefs.setString("latitude", latitude.toString()).then((bool success) {
+        return latitude.toString();
       });
     });
   }
