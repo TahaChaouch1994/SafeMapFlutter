@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class homescreen extends StatefulWidget{
   @override
   _homescreenState createState() => _homescreenState();
+  static LatLng currentPostion;
 }
 
 class _homescreenState extends State<homescreen> {
@@ -28,8 +29,8 @@ class _homescreenState extends State<homescreen> {
   bool _large;
   bool _medium;
   GoogleMapController mapController;
-  final Map<String, Marker> _markers = {};
   TextEditingController Ojbet = TextEditingController();
+
 
 
   final LatLng _center = const LatLng(45.521563, -122.677433);
@@ -40,6 +41,7 @@ class _homescreenState extends State<homescreen> {
   @override
   void initState() {
     super.initState();
+    _getUserLocation();
   }
   @override
   Widget build(BuildContext context) {
@@ -81,24 +83,35 @@ class _homescreenState extends State<homescreen> {
             if(page == 0)
               {return Acceuil();}
             if(page == 1)
-            {return Mapgoogle(_markers,_getLocation);}
+            {return MapGoogle();}
             if(page == 2)
             {return Ajout();}
             else{return Acceuil();}
         }
 
-  void _getLocation() async {
-    var currentLocation = await Geolocator()
+  void _getUserLocation() async {
+    var position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
 
     setState(() {
-      _markers.clear();
-      final marker = Marker(
-        markerId: MarkerId("curr_loc"),
-        position: LatLng(currentLocation.latitude, currentLocation.longitude),
-        infoWindow: InfoWindow(title: 'Your Location'),
-      );
-      _markers["Current Location"] = marker;
+      homescreen.currentPostion = LatLng(position.latitude, position.longitude);
+      //_saveMark(currentPostion.longitude, currentPostion.latitude);
+    });
+
+  }
+
+
+
+  Future<void> _saveMark(double longitude, double latitude) async {
+    final SharedPreferences prefs = await _prefs;
+
+    setState(() {
+      prefs.setString("longitude", longitude.toString()).then((bool success) {
+        return longitude.toString();
+      });
+      prefs.setString("latitude", latitude.toString()).then((bool success) {
+        return latitude.toString();
+      });
     });
   }
 

@@ -2,7 +2,6 @@
 import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:safemap/services/link.dart';
-import 'package:safemap/entities/user.dart';
 
 
 
@@ -15,5 +14,15 @@ class AcceuilService {
     dynamic body = jsonDecode(res.body);
     return body;
   }
+
+  Future<dynamic> getMaps() async
+  {
+    Response res = await get(link.linkw+"/getMaps");
+    dynamic body = jsonDecode(res.body);
+    return body;
+  }
+
+
+
 
 }
