@@ -61,7 +61,7 @@ class _MapGoogle extends State<MapGoogle> {
               return Text('Loading');
             case ConnectionState.done :
 
-
+//TEST
 
       print(_markers2);
 
