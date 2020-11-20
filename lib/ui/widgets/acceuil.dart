@@ -3,6 +3,7 @@
 import 'package:expansion_card/expansion_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_skeleton/flutter_skeleton.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:safemap/services/acceuilservice.dart';
 import 'package:safemap/ui/widgets/acceuilwidget.dart';
 
@@ -23,11 +24,12 @@ class _Acceuil extends State<Acceuil> {
   int test;
   List <dynamic> value2;
   AcceuilService as = new AcceuilService();
+  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
 
   @override
   void initState() {
     super.initState();
-
+    _ActiveLocation();
     Future <dynamic> rpt = as.getAllReports();
     rpt.then((value) {
 
@@ -102,6 +104,64 @@ class _Acceuil extends State<Acceuil> {
 
 
 
+  }
+  Future<void> requestPermission(Permission permission) async {
+    final status = await permission.request();
+
+    setState(() {
+      print(status);
+      _permissionStatus = status;
+      print(_permissionStatus);
+    });
+  }
+  _ActiveLocation() async {
+    if (!await Permission.location.isGranted) {
+      requestPermission(Permission.location);
+      print( _permissionStatus.toString());
+      /* await _geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+          .then((Position position) async {
+        setState(() {
+          _currentPosition = position;
+          print('CURRENT POS: $_currentPosition');
+          mapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: LatLng(position.latitude, position.longitude),
+                zoom: 18.0,
+              ),
+            ),
+          );
+        });
+        await _getAddress();
+      }).catchError((e) {
+        print(e);
+      });
+*/
+    }
+    else{
+      print( Permission.location.serviceStatus.toString());
+    }
+    /* await _geolocator
+          .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+          .then((Position position) async {
+        setState(() {
+          _currentPosition = position;
+          print('CURRENT POS: $_currentPosition');
+          mapController.animateCamera(
+            CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: LatLng(position.latitude, position.longitude),
+                zoom: 18.0,
+              ),
+            ),
+          );
+        });
+        await _getAddress();
+      }).catchError((e) {
+        print(e);
+      });}
+*/
   }
 }
 

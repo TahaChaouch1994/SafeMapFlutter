@@ -41,7 +41,7 @@ class _homescreenState extends State<homescreen> {
   @override
   void initState() {
     super.initState();
-    _getUserLocation();
+   // _getUserLocation();
   }
   @override
   Widget build(BuildContext context) {
@@ -83,12 +83,13 @@ class _homescreenState extends State<homescreen> {
             if(page == 0)
               {return Acceuil();}
             if(page == 1)
-            {return MapGoogle();}
+            {return MapView();}
             if(page == 2)
             {return Ajout();}
             else{return Acceuil();}
         }
 
+/*
   void _getUserLocation() async {
     var position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
@@ -114,6 +115,7 @@ class _homescreenState extends State<homescreen> {
       });
     });
   }
+*/
 
 
 }
