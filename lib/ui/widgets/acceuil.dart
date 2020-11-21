@@ -6,6 +6,8 @@ import 'package:flutter_skeleton/flutter_skeleton.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:safemap/services/acceuilservice.dart';
 import 'package:safemap/ui/widgets/acceuilwidget.dart';
+import 'package:geolocator/geolocator.dart'  as geo  ;
+
 
 
 
@@ -23,8 +25,10 @@ class _Acceuil extends State<Acceuil> {
   double _width;
   int test;
   List <dynamic> value2;
+  List <String> AdressePoste;
   AcceuilService as = new AcceuilService();
   PermissionStatus _permissionStatus = PermissionStatus.undetermined;
+  final geo.Geolocator _geolocator = geo.Geolocator();
 
   @override
   void initState() {
@@ -37,12 +41,30 @@ class _Acceuil extends State<Acceuil> {
         test = value.length;
         value2 = value;
       });
-
+     // _getAddress();
     });
 
   }
 
 
+  _getAddress() async {
+    try {
+    //  print(test);
+      for(int i = 0; i <test-1 ; i++)
+    {  List<geo.Placemark> p = await _geolocator.placemarkFromCoordinates(
+          double.parse(value2[i]["latitude"]),double.parse(value2[i]["longitude"]));
+
+      geo.Placemark place = p[0];
+
+      setState(() {
+        AdressePoste.add("${place.name}, ${place.locality}, ${place.country}");
+      });
+    print(AdressePoste[i]);}
+    } catch (e) {
+      print(e);
+    }
+
+  }
 
 
   Widget build(BuildContext context) {
@@ -74,7 +96,7 @@ class _Acceuil extends State<Acceuil> {
         test = value.length;
         value2 = value;
 
-        print(value2[0]["nom"]);
+       // print(value2[0]["nom"]);
 
 
 
@@ -90,7 +112,7 @@ class _Acceuil extends State<Acceuil> {
                     Column(children: <Widget>[
                       for(int i = 0; i < test; i++)
 
-                        AcceuilWidget2(value2[i]["victim"],value2[i]["objetvole"],value2[i]["description"]),
+                        AcceuilWidget2(value2[i]["victim"],value2[i]["objetvole"],value2[i]["description"],value2[i]["date"],value2[i]["contact"],value2[i]["longitude"],value2[i]["latitude"]),
 
                       SizedBox(height: _height / 40.0),
 
@@ -109,15 +131,15 @@ class _Acceuil extends State<Acceuil> {
     final status = await permission.request();
 
     setState(() {
-      print(status);
+    //  print(status);
       _permissionStatus = status;
-      print(_permissionStatus);
+     // print(_permissionStatus);
     });
   }
   _ActiveLocation() async {
     if (!await Permission.location.isGranted) {
       requestPermission(Permission.location);
-      print( _permissionStatus.toString());
+   //   print( _permissionStatus.toString());
       /* await _geolocator
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
           .then((Position position) async {
@@ -140,7 +162,7 @@ class _Acceuil extends State<Acceuil> {
 */
     }
     else{
-      print( Permission.location.serviceStatus.toString());
+      //print( Permission.location.serviceStatus.toString());
     }
     /* await _geolocator
           .getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
@@ -166,11 +188,16 @@ class _Acceuil extends State<Acceuil> {
 }
 
 
-Widget AcceuilWidget2(victim2,objetvole2,description2) {
+Widget AcceuilWidget2(victim2,objetvole2,description2,date2,contact2,longitude2,latitude2) {
 
     return AcceuilWidget(
       victim:victim2,
-      objetvole:objetvole2,
-      description: description2
+        objetvole:objetvole2,
+        description: description2,
+        date:date2,
+        contact:contact2,
+      longitude:longitude2,
+      latitude:latitude2
+
     );
 }
